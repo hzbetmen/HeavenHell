@@ -62,7 +62,8 @@ public class GamePanel extends JPanel {
     }
 
     private void setPanelSize() {
-        Dimension size = new Dimension(1920, 1080);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension size = new Dimension(screenSize.width,screenSize.height);
         setPreferredSize(size);
     }
 
