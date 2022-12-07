@@ -15,7 +15,7 @@ public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
 
-    private float xDelta = 100, yDelta = 100;
+    private float xDelta = 0, yDelta = 0;
 
     private BufferedImage img, idleAni[];
     private int aniTick, aniIndex, aniSpeed = 30;
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel {
 
     private void setPanelSize() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension size = new Dimension(screenSize.width,screenSize.height);
+        Dimension size = new Dimension(screenSize.width, screenSize.height);
         setPreferredSize(size);
     }
 
@@ -72,9 +72,9 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-        g.drawImage(img, (int) xDelta, (int) yDelta, imgWidth, imgHeight, null);
-
+        for (int i = 0; i < 30; i++) {
+            g.drawImage(img, (int) xDelta + i*64, (int) yDelta + 500, imgWidth, imgHeight, null);
+        }
 
     }
 
