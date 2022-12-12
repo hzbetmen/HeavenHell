@@ -1,35 +1,21 @@
 package main;
 
-import Inputs.KeyboardInputs;
-import Inputs.MouseInputs;
-
-import javax.imageio.ImageIO;
+import inputs.KeyboardInputs;
+import inputs.MouseInputs;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
+import static main.Game.*;
 
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
+    private Game game;
 
-    private float xDelta = 0, yDelta = 0;
-
-    private BufferedImage img, idleAni[];
-    private int aniTick, aniIndex, aniSpeed = 30;
-    private final int imgTile = 16;
-    private int blockScale = 4;
-    private int imgHeight = imgTile * blockScale, imgWidth = imgTile * blockScale;
-
-
-    public GamePanel() {
-
+    public GamePanel(Game game) {
+        this.game = game;
         mouseInputs = new MouseInputs(this);
 
-        importImg();
-        loadAnimations();
         setPanelSize();
 
         addKeyListener(new KeyboardInputs(this));
@@ -38,49 +24,20 @@ public class GamePanel extends JPanel {
 
     }
 
-    private void importImg() {
-        InputStream is = getClass().getResourceAsStream("/FLOOR_HELL.png");
-
-        try {
-            img = ImageIO.read(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    //private void ani
-    private void loadAnimations() {
-//        idleAni = new BufferedImage[2];
-//        for (int i = 0; i < idleAni.length; i++) {
-//            idleAni[i] = img.getSubimage(i*8, 0, 8, 16);
-//        }
-    }
-
     private void setPanelSize() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension size = new Dimension(screenSize.width, screenSize.height);
+        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
         setPreferredSize(size);
     }
 
+    public Game getGame() {
+        return game;
+    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (int i = 0; i < 30; i++) {
-            g.drawImage(img, (int) xDelta + i*64, (int) yDelta + 500, imgWidth, imgHeight, null);
-        }
-
+        game.render(g);
     }
 
-    public void setPos(int x, int y) {
-        xDelta = x;
-        yDelta = y;
-    }
 
 }
