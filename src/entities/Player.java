@@ -10,9 +10,9 @@ import static utilz.Constants.playerConstants.*;
 public class Player extends Entity {
 
     private BufferedImage[][] animations;
-    private int aniTick, aniIndex, aniSpeed = 15;
+    private int aniTick, aniIndex, aniSpeed = 30;
     private int playerAction = IDLE;
-    private boolean up,left,down,right;
+    private boolean up, left, down, right;
     private boolean moving = false, attacking = false;
     private int playerSpeed = 1;
 
@@ -32,6 +32,7 @@ public class Player extends Entity {
     public void setAttacking(boolean attacking) {
         this.attacking = attacking;
     }
+
     private void updatePos() {
 
         moving = false;
@@ -89,17 +90,17 @@ public class Player extends Entity {
         aniTick = 0;
         aniIndex = 0;
     }
-    public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int) x, (int) y, width, height, null);
 
+    public void render(Graphics g) {
+        g.drawImage(animations[playerAction][aniIndex], (int) x, (int) y, width*3, height*3, null);
     }
+
     private void loadAnimations() {
         BufferedImage img = LoadSave.GetPlayerAtlas(LoadSave.PLAYER_ATLAS);
-        animations = new BufferedImage[9][6];
+        animations = new BufferedImage[3][2];
         for (int j = 0; j < animations.length; j++) {
             for (int i = 0; i < animations[j].length; i++) {
-
-                animations[j][i] = img.getSubimage(i * 64, j*40, 64, 40);
+                animations[j][i] = img.getSubimage(i * 32, j * 32, 32, 32);
             }
         }
 

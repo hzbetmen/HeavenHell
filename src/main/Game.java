@@ -37,14 +37,11 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        player = new Player(200f, 200f, (int) (64 * SCALE), (int) (40 * SCALE));
+        player = new Player(200f, 200f, (int) (16 * SCALE), (int) (16 * SCALE)); // xpos yPos height width
         levelManager = new LevelManager(this);
     }
 
-    private void startGameLoop() {
-        gameThread = new Thread(this);
-        gameThread.start();
-    }
+
     public void render(Graphics g) {
         levelManager.draw(g);
         player.render(g);
@@ -63,6 +60,10 @@ public class Game implements Runnable {
         player.resetDirBoolean();
     }
 
+    private void startGameLoop() {
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
     @Override
     public void run() {
 

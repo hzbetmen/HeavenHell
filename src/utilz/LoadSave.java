@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class LoadSave {
-    public static final String PLAYER_ATLAS = "player_sprites.png";
+    //public static final String PLAYER_ATLAS = "player_sprites.png";
+    public static final String PLAYER_ATLAS = "eve.png";
+
     public static final String LEVEL_ATLAS = "outside_sprites.png";
     public static final String LEVEL_ONE_DATA = "level_one_data.png";
 
@@ -35,7 +37,7 @@ public class LoadSave {
         return img;
     }
 
-    public static int[][] GetLevelDate() {
+    public static int[][] GetLevelData() {
         int[][] levelData = new int[Game.TILES_IN_HEIGHT][Game.TILES_IN_WIDTH];
         BufferedImage img = LoadSave.GetPlayerAtlas(LEVEL_ONE_DATA);
 

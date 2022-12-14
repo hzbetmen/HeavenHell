@@ -16,7 +16,7 @@ public class LevelManager {
         this.game = game;
         //levelSprite = LoadSave.GetPlayerAtlas(LoadSave.LEVEL_ATLAS);
         importLevelSprite();
-        levelOne = new Level(LoadSave.GetLevelDate());
+        levelOne = new Level(LoadSave.GetLevelData());
     }
 
     private void importLevelSprite() {
