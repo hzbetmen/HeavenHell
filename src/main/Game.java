@@ -37,8 +37,9 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        player = new Player(200f, 200f, (int) (16 * SCALE), (int) (16 * SCALE)); // xpos yPos height width
+        player = new Player(5*TILES_SIZE, 5*TILES_SIZE, (int) (32 * SCALE), (int) (32 * SCALE)); // xpos yPos height width
         levelManager = new LevelManager(this);
+        player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
     }
 
 

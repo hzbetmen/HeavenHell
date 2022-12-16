@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class LoadSave {
-    //public static final String PLAYER_ATLAS = "player_sprites.png";
-    public static final String PLAYER_ATLAS = "eve.png";
+    public static final String EVE_ATLAS = "eve.png";
+    public static final String ADAM_ATLAS = "adam.png";
+    public static final String SPEARMAN_ATLAS = "spearman.png";
 
-    public static final String LEVEL_ATLAS = "outside_sprites.png";
-    public static final String LEVEL_ONE_DATA = "level_one_data.png";
+    public static final String LEVEL_ATLAS = "BLOCKS.png";
+    public static final String LEVEL_ONE_DATA = "test_level.png";
 
 
     public static BufferedImage GetPlayerAtlas(String fileName) {
@@ -45,7 +46,7 @@ public class LoadSave {
             for (int j = 0; j < img.getWidth(); j++) {
                 Color color = new Color(img.getRGB(j, i));
                 int value = color.getRed();
-                if (value >= 48)
+                if (value >= 16)
                     value = 0;
                 levelData[i][j] = value;
             }

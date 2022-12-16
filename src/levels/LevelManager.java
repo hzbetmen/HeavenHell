@@ -21,11 +21,11 @@ public class LevelManager {
 
     private void importLevelSprite() {
         BufferedImage img = LoadSave.GetPlayerAtlas(LoadSave.LEVEL_ATLAS);
-        levelSprite = new BufferedImage[48];
+        levelSprite = new BufferedImage[16];
 
         for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 12; j++) {
-                levelSprite[i * 12 + j] = img.getSubimage(j * 32, i * 32, 32, 32);
+            for (int j = 0; j < 4; j++) {
+                levelSprite[i * 4 + j] = img.getSubimage(j * 32, i * 32, 32, 32);
             }
         }
     }
@@ -42,6 +42,10 @@ public class LevelManager {
 
     public void update() {
 
+    }
+
+    public Level getCurrentLevel() {
+        return levelOne;
     }
 
 }
