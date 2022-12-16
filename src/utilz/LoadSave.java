@@ -15,6 +15,7 @@ public class LoadSave {
 
     public static final String LEVEL_ATLAS = "BLOCKS.png";
     public static final String LEVEL_ONE_DATA = "test_level.png";
+    public static final String LEVEL_ONE_BACKGROUND = "hell-heaven-stage-one.png";
 
 
     public static BufferedImage GetPlayerAtlas(String fileName) {
