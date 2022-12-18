@@ -25,7 +25,7 @@ public class LevelManager {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                levelSprite[i * 4 + j] = img.getSubimage(j * 32, i * 32, 32, 32);
+                levelSprite[i * 4 + j] = img.getSubimage(j * Game.TILES_DEFAULT_SIZE, i * Game.TILES_DEFAULT_SIZE, Game.TILES_DEFAULT_SIZE, Game.TILES_DEFAULT_SIZE); // Every block of terrain is a tile
             }
         }
     }
