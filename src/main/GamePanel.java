@@ -10,7 +10,7 @@ import static main.Game.*;
 public class GamePanel extends JPanel {
 
     private MouseInputs mouseInputs;
-    private Game game;
+    private static Game game;
 
     public GamePanel(Game game) {
         this.game = game;
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
         setPreferredSize(size);
     }
 
-    public Game getGame() {
+    public static Game getGame() {
         return game;
     }
 

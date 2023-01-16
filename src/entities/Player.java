@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import static utilz.Constants.playerConstants.*;
 import static utilz.HelpMethods.*;
+import static utilz.HelpMethods.EntityIsOnFloor;
 
 public class Player extends Entity {
 
