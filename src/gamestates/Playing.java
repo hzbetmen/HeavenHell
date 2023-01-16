@@ -43,8 +43,6 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1)
-            player.setAttacking(true);
 
     }
 
@@ -66,9 +64,8 @@ public class Playing extends State implements Statemethods{
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> player.setUp(true);
+            case KeyEvent.VK_W -> player.setJump(true);
             case KeyEvent.VK_A -> player.setLeft(true);
-            case KeyEvent.VK_S -> player.setDown(true);
             case KeyEvent.VK_D -> player.setRight(true);
             case KeyEvent.VK_J -> player.setAttacking(true);
             case KeyEvent.VK_BACK_SPACE -> Gamestate.state = Gamestate.MENU;
@@ -80,9 +77,8 @@ public class Playing extends State implements Statemethods{
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> player.setUp(false);
+            case KeyEvent.VK_W -> player.setJump(false);
             case KeyEvent.VK_A -> player.setLeft(false);
-            case KeyEvent.VK_S -> player.setDown(false);
             case KeyEvent.VK_D -> player.setRight(false);
             //case KeyEvent.VK_J -> player.setAttacking(false); not setting stop atk here cauze it will stop the animation midway as the time between press and release is smaller than the the time between changing animations
             // Break in between each case?
