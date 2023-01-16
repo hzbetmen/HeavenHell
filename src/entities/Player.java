@@ -177,18 +177,8 @@ public class Player extends Entity {
     }
 
     public void resetDirBoolean() {
-        up = false;
         left = false;
-        down = false;
         right = false;
-    }
-
-    public boolean isUp() {
-        return up;
-    }
-
-    public void setUp(boolean up) {
-        this.up = up;
     }
 
     public boolean isLeft() {
@@ -197,14 +187,6 @@ public class Player extends Entity {
 
     public void setLeft(boolean left) {
         this.left = left;
-    }
-
-    public boolean isDown() {
-        return down;
-    }
-
-    public void setDown(boolean down) {
-        this.down = down;
     }
 
     public boolean isRight() {
