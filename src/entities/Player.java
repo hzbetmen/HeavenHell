@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static utilz.Constants.playerConstants.*;
-import static utilz.HelpMethods.CanMoveHere;
+
 
 public class Player extends Entity {
 
