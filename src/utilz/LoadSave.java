@@ -5,8 +5,11 @@ import main.Game;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class LoadSave {
     public static final String EVE_ATLAS = "eve.png";
@@ -14,7 +17,7 @@ public class LoadSave {
     public static final String SPEARMAN_ATLAS = "spearman.png";
 
     public static final String LEVEL_ATLAS = "BLOCKS.png";
-    public static final String LEVEL_ONE_DATA = "test_level.png";
+    public static final String LEVEL_ONE_DATA = "expandedLevel.png";
     public static final String LEVEL_ONE_BACKGROUND = "hell-heaven-stage-one.png";
 
 
@@ -39,20 +42,38 @@ public class LoadSave {
         return img;
     }
 
-    public static int[][] GetLevelData() {
-        int[][] levelData = new int[Game.TILES_IN_HEIGHT][Game.TILES_IN_WIDTH];
-        BufferedImage img = LoadSave.GetPlayerAtlas(LEVEL_ONE_DATA);
 
-        for (int i = 0; i < img.getHeight(); i++) {
-            for (int j = 0; j < img.getWidth(); j++) {
-                Color color = new Color(img.getRGB(j, i));
-                int value = color.getRed();
-                if (value >= 16)
-                    value = 0;
-                levelData[i][j] = value;
+
+    public static BufferedImage[] GetAllLevels() {
+        URL url = LoadSave.class.getResource("/lvls");
+        File file = null;
+
+        try {
+            file = new File(url.toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        File files[] = file.listFiles();
+        File filesSorted[] = new File[files.length];
+
+        for (int i = 0; i < files.length; i++)
+            for (int j = 0; j < files.length; j++) {
+                if (files[j].getName().equals("" + (i + 1) + ".png"))
+                    filesSorted[i] = files[j];
+            }
+
+        BufferedImage[] imgs = new BufferedImage[filesSorted.length];
+
+        for (int i = 0; i < imgs.length; i++) {
+            try {
+                imgs[i] = ImageIO.read(filesSorted[i]);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
-        return levelData;
+
+        return imgs;
     }
 
 }

@@ -3,41 +3,82 @@ package gamestates;
 import entities.Player;
 import levels.LevelManager;
 import main.Game;
+import ui.LevelCompletedOverlay;
+import utilz.LoadSave;
 
-import javax.swing.undo.StateEdit;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import static main.Game.TILES_SIZE;
 
-public class Playing extends State implements Statemethods{
+public class Playing extends State implements Statemethods {
     private Player player;
     private LevelManager levelManager;
+
+    private int xLvlOffset = 0;
+    private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
+    private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+
+
+    //Complete level
+    private LevelCompletedOverlay levelCompletedOverlay;
+    private boolean levelCompleted = false;
+    private int maxLvlOffset;
+
 
     public Playing(Game game) {
         super(game);
         initClasses();
 
-
+        calcLvlOffset();
     }
+
+    private void calcLvlOffset() {
+        maxLvlOffset = levelManager.getCurrentLevel().getLvlOffset();
+    }
+
     private void initClasses() {
         levelManager = new LevelManager(game);
-        player = new Player(5*TILES_SIZE, 5*TILES_SIZE, (int) (32 * Game.SCALE), (int) (32 * Game.SCALE)); // xpos yPos height width
+        player = new Player(5 * TILES_SIZE, 5 * TILES_SIZE, (int) (32 * Game.SCALE), (int) (32 * Game.SCALE)); // xpos yPos height width
         player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
+        levelCompletedOverlay = new LevelCompletedOverlay(this);
     }
 
     @Override
     public void update() {
-        levelManager.update();
-        player.update();
+        if (levelCompleted)
+            levelCompletedOverlay.update();
+        else {
+            levelManager.update();
+            player.update();
+            checkCloseToBorder();
+        }
+    }
+
+    private void checkCloseToBorder() {
+        int playerX = (int) player.getHitBox().x;
+        int diff = playerX - xLvlOffset;
+
+        if (diff > rightBorder)
+            xLvlOffset += diff - rightBorder;
+        else if (diff < leftBorder)
+            xLvlOffset += diff - leftBorder;
+
+        if (xLvlOffset >= maxLvlOffset)
+            xLvlOffset = maxLvlOffset;
+        else if (xLvlOffset <= 0)
+            xLvlOffset = 0;
 
     }
 
     @Override
     public void draw(Graphics g) {
-        levelManager.draw(g);
-        player.render(g);
+        levelManager.draw(g, xLvlOffset);
+        player.render(g, xLvlOffset);
+
+        if (levelCompleted)
+            levelCompletedOverlay.draw(g);
 
     }
 
@@ -63,32 +104,53 @@ public class Playing extends State implements Statemethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> player.setJump(true);
-            case KeyEvent.VK_A -> player.setLeft(true);
-            case KeyEvent.VK_D -> player.setRight(true);
-            case KeyEvent.VK_J -> player.setAttacking(true);
-            case KeyEvent.VK_BACK_SPACE -> Gamestate.state = Gamestate.MENU;
-
+        if (levelCompleted)
+            levelCompletedOverlay.keyPressed(e);
+        else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W -> player.setJump(true);
+                case KeyEvent.VK_A -> player.setLeft(true);
+                case KeyEvent.VK_D -> player.setRight(true);
+                case KeyEvent.VK_J -> player.setAttacking(true);
+            }
         }
 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> player.setJump(false);
-            case KeyEvent.VK_A -> player.setLeft(false);
-            case KeyEvent.VK_D -> player.setRight(false);
-            //case KeyEvent.VK_J -> player.setAttacking(false); not setting stop atk here cauze it will stop the animation midway as the time between press and release is smaller than the the time between changing animations
-            // Break in between each case?
+        if (levelCompleted)
+            levelCompletedOverlay.keyReleased(e);
+        else {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_W -> player.setJump(false);
+                case KeyEvent.VK_A -> player.setLeft(false);
+                case KeyEvent.VK_D -> player.setRight(false);
+                case KeyEvent.VK_ESCAPE -> Gamestate.state = Gamestate.MENU;
+                case KeyEvent.VK_N -> levelCompleted = true;
+            }
         }
+    }
 
-    } public Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     public void windowFocusLost() {
         player.resetDirBoolean();
+    }
+
+    public void setMaxLvlOffset(int lvlOffset) {
+        this.maxLvlOffset = lvlOffset;
+    }
+
+    public void resetAll() {
+        levelCompleted = false;
+        player.resetAll();
+    }
+
+    public void loadNextLvl() {
+        resetAll();
+        levelManager.loadNextLevel();
     }
 }

@@ -2,7 +2,9 @@ package utilz;
 
 import main.Game;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class HelpMethods {
 
@@ -15,8 +17,8 @@ public class HelpMethods {
     }
 
     private static boolean IsSolid(float x, float y, int[][] lvlData) {
-
-        if (x < 0 || x >= Game.GAME_WIDTH)
+        int maxWidth = lvlData[0].length * Game.TILES_SIZE;
+        if (x < 0 || x >= maxWidth)
             return true;
         if (y < 0 || y >= Game.GAME_HEIGHT)
             return true;
@@ -65,6 +67,19 @@ public class HelpMethods {
         }
     }
 
+    public static int[][] GetLevelData(BufferedImage img) {
+        int[][] levelData = new int[img.getHeight()][img.getWidth()];
 
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getRed();
+                if (value >= 16)
+                    value = 0;
+                levelData[i][j] = value;
+            }
+        }
+        return levelData;
+    }
 
 }

@@ -52,7 +52,6 @@ public class Game implements Runnable {
     private void initClasses() {
         menu = new Menu(this);
         playing = new Playing(this);
-
     }
 
 
@@ -65,7 +64,6 @@ public class Game implements Runnable {
                 playing.draw(g);
                 break;
             case PAUSE:
-                break;
             default:
                 break;
         }
@@ -82,14 +80,11 @@ public class Game implements Runnable {
                     playing.update();
                     break;
                 case PAUSE:
-                    break;
                 default:
                     break;
 
             }
         }
-
-
 
 
     public void windowFocusLost() {

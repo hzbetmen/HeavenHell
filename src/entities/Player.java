@@ -23,7 +23,7 @@ public class Player extends Entity {
 
     //Jumping & Gravity
     private float airSpeed = 0f;
-    private float jumpSpeed = -3f * Game.SCALE;
+    private float jumpSpeed = -4f * Game.SCALE;
     private float gravity = 0.04f * Game.SCALE;
     private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
     private boolean inAir = false;
@@ -54,8 +54,9 @@ public class Player extends Entity {
             jump();
         }
 
-        if (!right && !left && !inAir)
-            return;
+        if (!inAir)
+            if ((!right && !left) || (right && left))
+                return;
 
         float xSpeed = 0;
 
@@ -156,8 +157,9 @@ public class Player extends Entity {
         aniIndex = 0;
     }
 
-    public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffSet), (int) (hitBox.y - yDrawOffSet), width, height, null);
+    public void render(Graphics g, int xLvlOffset) {
+        g.drawImage(animations[playerAction][aniIndex], (int) (hitBox.x - xDrawOffSet) - xLvlOffset, (int) (hitBox.y - yDrawOffSet), width, height, null);
+        drawHitbox(g, xLvlOffset);
     }
 
     public void loadLvlData(int[][] lvlData) {
@@ -200,5 +202,20 @@ public class Player extends Entity {
 
     public void setJump(boolean jump) {
         this.jump = jump;
+    }
+
+    public void resetAll() {
+        resetDirBoolean();
+        inAir = false;
+        attacking = false;
+        moving = false;
+        playerAction = IDLE;
+
+        hitBox.x = x;
+        hitBox.y = y;
+
+        if(!EntityIsOnFloor(hitBox, lvlData))
+            inAir = true;
+
     }
 }
