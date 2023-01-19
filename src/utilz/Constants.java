@@ -1,6 +1,18 @@
 package utilz;
 
+import main.Game;
+
 public class Constants {
+
+    public static class Environment {
+        public static class pauseOverlay {
+            public static int PLAYBUTTON_DEFAULT_WIDTH = 400;
+            public static int PLAYBUTTON_DEFAULT_HEIGHT = 500;
+
+            public static int PLAYBUTTON_WIDTH = (int) (PLAYBUTTON_DEFAULT_WIDTH/5*2 * Game.SCALE);
+            public static int PLAYBUTTON_HEIGHT = (int) (PLAYBUTTON_DEFAULT_HEIGHT/5*2 * Game.SCALE);
+        }
+    }
     public static class playerConstants {
 
         public static final int IDLE = 0;

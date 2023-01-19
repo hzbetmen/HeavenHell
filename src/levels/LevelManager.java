@@ -29,7 +29,7 @@ public class LevelManager {
     }
 
     private void importLevelSprite() {
-        BufferedImage img = LoadSave.GetPlayerAtlas(LoadSave.LEVEL_ATLAS);
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
         levelSprite = new BufferedImage[16];
 
         for (int i = 0; i < 4; i++) {
@@ -40,7 +40,7 @@ public class LevelManager {
     }
 
     public void draw(Graphics g, int xLvlOffset) {
-        BufferedImage img = LoadSave.GetPlayerAtlas(LoadSave.LEVEL_ONE_BACKGROUND);
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ONE_BACKGROUND);
         Image bg = img.getScaledInstance(Game.GAME_WIDTH, Game.GAME_HEIGHT, Image.SCALE_DEFAULT);
         g.drawImage(bg, 0, 0, null);
 

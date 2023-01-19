@@ -169,7 +169,7 @@ public class Player extends Entity {
     }
 
     private void loadAnimations() {
-        BufferedImage img = LoadSave.GetPlayerAtlas(LoadSave.EVE_ATLAS);
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EVE_ATLAS);
         animations = new BufferedImage[4][2];
         for (int j = 0; j < animations.length; j++) {
             for (int i = 0; i < animations[j].length; i++) {

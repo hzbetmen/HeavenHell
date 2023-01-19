@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 public class Pause extends State implements Statemethods {
 
-        public Pause(Game game) {
+    public Pause(Game game) {
             super(game);
         }
 

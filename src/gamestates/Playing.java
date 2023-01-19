@@ -4,6 +4,7 @@ import entities.Player;
 import levels.LevelManager;
 import main.Game;
 import ui.LevelCompletedOverlay;
+import ui.PauseOverlay;
 import utilz.LoadSave;
 
 import java.awt.*;
@@ -15,6 +16,10 @@ import static main.Game.TILES_SIZE;
 public class Playing extends State implements Statemethods {
     private Player player;
     private LevelManager levelManager;
+
+    //pause
+    private boolean paused = true;
+    private PauseOverlay pauseOverlay;
 
     private int xLvlOffset = 0;
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
@@ -43,6 +48,7 @@ public class Playing extends State implements Statemethods {
         player = new Player(5 * TILES_SIZE, 5 * TILES_SIZE, (int) (32 * Game.SCALE), (int) (32 * Game.SCALE)); // xpos yPos height width
         player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
         levelCompletedOverlay = new LevelCompletedOverlay(this);
+        pauseOverlay = new PauseOverlay(this);
     }
 
     @Override
@@ -52,6 +58,7 @@ public class Playing extends State implements Statemethods {
         else {
             levelManager.update();
             player.update();
+            pauseOverlay.update();
             checkCloseToBorder();
         }
     }
@@ -77,6 +84,9 @@ public class Playing extends State implements Statemethods {
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
 
+        if (paused)
+            pauseOverlay.draw(g);
+
         if (levelCompleted)
             levelCompletedOverlay.draw(g);
 
@@ -89,16 +99,22 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (paused)
+            pauseOverlay.mousePressed(e);
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (paused)
+            pauseOverlay.mouseReleased(e);
 
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if (paused)
+            pauseOverlay.mouseMoved(e);
 
     }
 
@@ -152,5 +168,9 @@ public class Playing extends State implements Statemethods {
     public void loadNextLvl() {
         resetAll();
         levelManager.loadNextLevel();
+    }
+
+    public void unpausedGame(boolean paused) {
+        this.paused = paused;
     }
 }

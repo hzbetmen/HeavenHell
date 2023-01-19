@@ -19,7 +19,9 @@ public class LevelCompletedOverlay {
     public void draw(Graphics g) {
         g.setColor(new Color(0, 0, 0, 100));
         g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
-        g.drawString(nextLevel, Game.GAME_WIDTH/2 - nextLevel.length()/2, Game.GAME_HEIGHT/2);
+
+        g.setColor(Color.magenta);
+        g.drawString(nextLevel, Game.GAME_WIDTH/2 - nextLevel.length()/2 - (int) (2 * Game.SCALE), 100);
     }
 
     public void update() {
