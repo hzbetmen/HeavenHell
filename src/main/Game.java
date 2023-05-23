@@ -1,17 +1,12 @@
 package main;
 
 
-import entities.Player;
-
-import gamestates.Gamestate;
+import gamestates.*;
 import gamestates.Menu;
+import ui.ChoosingCharacter;
 
-import gamestates.Playing;
-
-import gamestates.Pause;
-
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 
 public class Game implements Runnable {
 
@@ -24,9 +19,10 @@ public class Game implements Runnable {
     private Playing playing;
 
     private Menu menu;
+    private Query query;
+    private Option option;
 
-    private Pause pause;
-
+    private ChoosingCharacter choosingCharacter;
 
 
     public final static int TILES_DEFAULT_SIZE = 32;
@@ -36,6 +32,7 @@ public class Game implements Runnable {
     public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
     public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
+
     public Game() {
 
         initClasses();
@@ -52,59 +49,63 @@ public class Game implements Runnable {
     private void initClasses() {
         menu = new Menu(this);
         playing = new Playing(this);
+        option = new Option(this);
+        query = new Query(this);
     }
 
 
     public void render(Graphics g) {
         switch (Gamestate.state) {
-            case MENU:
-                menu.draw(g);
-                break;
-            case PLAYING:
-                playing.draw(g);
-                break;
-            case PAUSE:
-            default:
-                break;
+            case MENU -> menu.draw(g);
+            case PLAYING -> playing.draw(g);
+            case OPTION -> option.draw(g);
+            case QUIT -> System.exit(0);
+            case QUERY -> query.draw(g);
         }
     }
 
-        public void update () {
+    public void update() {
 
-            switch (Gamestate.state) {
-
-                case MENU:
-                    menu.update();
-                    break;
-                case PLAYING:
-                    playing.update();
-                    break;
-                case PAUSE:
-                default:
-                    break;
-
-            }
+        switch (Gamestate.state) {
+            case MENU -> menu.update();
+            case PLAYING -> playing.update();
+            case OPTION -> option.update();
+            case QUIT -> System.exit(0);
+            case QUERY -> query.update();
         }
+    }
 
 
     public void windowFocusLost() {
-        if(Gamestate.state == Gamestate.PLAYING)
+        if (Gamestate.state == Gamestate.PLAYING)
             playing.getPlayer().resetDirBoolean();
     }
-    public Menu getMenu(){
+
+    public Menu getMenu() {
         return menu;
     }
-    public Playing getPlaying(){
+
+    public Query getQuery() {
+        return query;
+    }
+    public Option getOption() {
+        return option;
+    }
+
+    public Playing getPlaying() {
         return playing;
     }
-    public Pause getPause(){
-        return pause;
+
+    public ChoosingCharacter getChoosingCharacter() {
+        return choosingCharacter;
     }
+
 
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
     }
+
     @Override
     public void run() {
 
@@ -145,7 +146,7 @@ public class Game implements Runnable {
 
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " + frames + " | UPS: " + updates);
+                //System.out.println("FPS: " + frames + " | UPS: " + updates);
                 frames = 0;
                 updates = 0;
             }

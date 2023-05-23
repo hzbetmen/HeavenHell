@@ -40,10 +40,6 @@ public class LevelManager {
     }
 
     public void draw(Graphics g, int xLvlOffset) {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ONE_BACKGROUND);
-        Image bg = img.getScaledInstance(Game.GAME_WIDTH, Game.GAME_HEIGHT, Image.SCALE_DEFAULT);
-        g.drawImage(bg, 0, 0, null);
-
         for (int i = 0; i < Game.TILES_IN_HEIGHT; i++) {
             for (int j = 0; j < levels.get(levelIndex).getLevelData()[0].length; j++) {
                 int index = levels.get(levelIndex).getSpriteIndex(j, i);
@@ -68,13 +64,25 @@ public class LevelManager {
     public void loadNextLevel() {
         levelIndex++;
         if (levelIndex >= levels.size()) {
+            Gamestate.state = Gamestate.QUERY;
             levelIndex = 0;
-            System.out.println("No more levels!");
-            Gamestate.state = Gamestate.MENU;
+            game.getPlaying().choosingCharacterDone(false);
         }
 
         Level newLevel = levels.get(levelIndex);
         game.getPlaying().getPlayer().loadLvlData(newLevel.getLevelData());
+        game.getPlaying().getEnemyManager().loadEnemies(getCurrentLevel());
         game.getPlaying().setMaxLvlOffset(newLevel.getLvlOffset());
+        game.getPlaying().getObjectManager().loadObjects(newLevel);
+    }
+
+    public void setLevelIndex(int levelIndex) {
+        this.levelIndex = levelIndex;
+        game.getPlaying().choosingCharacterDone(false);
+        Level newLevel = levels.get(levelIndex);
+        game.getPlaying().getPlayer().loadLvlData(newLevel.getLevelData());
+        game.getPlaying().getEnemyManager().loadEnemies(getCurrentLevel());
+        game.getPlaying().setMaxLvlOffset(newLevel.getLvlOffset());
+        game.getPlaying().getObjectManager().loadObjects(newLevel);
     }
 }

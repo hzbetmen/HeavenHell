@@ -14,10 +14,11 @@ public class GameWindow extends JFrame {
 
         jFrame.add(gamePanel);
 
-        //jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
 
         jFrame.pack();
+        jFrame.setLocationRelativeTo(null);
+
 
         jFrame.setVisible(true);
         jFrame.addWindowFocusListener(new WindowFocusListener() {

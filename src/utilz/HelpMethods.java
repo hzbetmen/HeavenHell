@@ -1,10 +1,21 @@
 package utilz;
 
+import entities.Devil;
+import entities.Skeleton;
 import main.Game;
+import objects.FireBall;
+import objects.Potion;
+import ui.Button;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static utilz.Constants.EnemyConstants.*;
+import static utilz.Constants.ObjectConstants.BLUE_POTION;
+import static utilz.Constants.ObjectConstants.RED_POTION;
 
 public class HelpMethods {
 
@@ -25,7 +36,12 @@ public class HelpMethods {
 
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
-        int value = lvlData[(int) yIndex][(int) xIndex];
+
+        return IsTileSolid((int) xIndex, (int) yIndex, lvlData);
+    }
+
+    public static boolean IsTileSolid(int xTile, int yTile, int[][] lvlData) {
+        int value = lvlData[yTile][xTile];
 
         if (value == 3 || value == 7 || value == 11) {
             return false;
@@ -53,17 +69,54 @@ public class HelpMethods {
         return true;
     }
 
-    public static float GetEntityYPosBelowRoofOrAboveFloor(float airSpeed, Rectangle2D.Float hitbox) {
+    public static boolean IsFloor(Rectangle2D.Float hitbox, float xSpeed, int[][] lvlData) {
+        if (xSpeed > 0) {
+            return IsSolid(hitbox.x + hitbox.width + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+        } else {
+            return IsSolid(hitbox.x + xSpeed, hitbox.y + hitbox.height + 1, lvlData);
+        }
+    }
+
+    public static boolean IsAllTilesWalkable(int xStart, int xEnd, int y, int[][] lvlData) {
+        for (int i = 0; i < xEnd - xStart; i++) {
+            if (IsSolid(xStart + i, y, lvlData)) {
+                return true;
+            }
+            if (!IsSolid(xStart + i, y + 1, lvlData)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public static float GetEntityYPosBelowRoofOrAboveFloor(float airSpeed, Rectangle2D.Float hitbox, boolean isDevil) {
         int currentTile = (int) hitbox.y / Game.TILES_SIZE;
         int tileYPos = currentTile * Game.TILES_SIZE;
 
         if (airSpeed > 0) {
             //Falling - Hit Floor
-            int yOffset = (int) (Game.TILES_SIZE - hitbox.height);
-            return tileYPos + yOffset - 1;
+            if (!isDevil) {
+                int yOffset = (int) (Game.TILES_SIZE - hitbox.height);
+                return tileYPos + yOffset - 1;
+            } else {
+                int yOffset = (int) (Game.TILES_SIZE * 3 - hitbox.height);
+                return tileYPos + yOffset - 1;
+            }
         } else {
             //Jumping - Hit Roof
             return tileYPos;
+        }
+    }
+
+    public static boolean IsSightClear(int[][] lvlData, Rectangle2D.Float firstHitbox, Rectangle2D.Float secondHitbox, int yTile) {
+        int firstXTile = (int) firstHitbox.x / Game.TILES_SIZE;
+        int secondXTile = (int) secondHitbox.x / Game.TILES_SIZE;
+
+        if (firstXTile > secondXTile) {
+            return IsAllTilesWalkable(secondXTile, firstXTile, yTile, lvlData);
+        } else {
+            return IsAllTilesWalkable(firstXTile, secondXTile, yTile, lvlData);
         }
     }
 
@@ -80,6 +133,53 @@ public class HelpMethods {
             }
         }
         return levelData;
+    }
+
+    public static boolean isIn(MouseEvent e, Button pauseButton) {
+        return pauseButton.getBound().contains(e.getX(), e.getY());
+    }
+
+    public static ArrayList<Potion> GetPotions(BufferedImage img) {
+        ArrayList<Potion> list = new ArrayList<>();
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getBlue();
+                if (value == RED_POTION || value == BLUE_POTION)
+                    list.add(new Potion(i * Game.TILES_SIZE, j * Game.TILES_SIZE, value));
+            }
+        return list;
+    }
+    public static boolean isFireBallHittingLevel(FireBall fp, int[][] lvlData) {
+        return IsSolid(fp.getHitBox().x + fp.getHitBox().width/2, fp.getHitBox().y + fp.getHitBox().height/2,lvlData);
+    }
+
+    public static ArrayList<Skeleton> GetSkeleton(BufferedImage img) {
+        ArrayList<Skeleton> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getGreen();
+                if (value == SKELETON) {
+                    list.add(new Skeleton(j * Game.TILES_SIZE, i * Game.TILES_SIZE));
+                }
+            }
+        }
+        return list;
+    }
+
+    public static ArrayList<Devil> GetDevils(BufferedImage img) {
+        ArrayList<Devil> list = new ArrayList<>();
+        for (int i = 0; i < img.getHeight(); i++) {
+            for (int j = 0; j < img.getWidth(); j++) {
+                Color color = new Color(img.getRGB(j, i));
+                int greenValue = color.getGreen();
+                if (greenValue >= DEVIL && greenValue < 5) {
+                    list.add(new Devil(j * Game.TILES_SIZE, i * Game.TILES_SIZE));
+                }
+            }
+        }
+        return list;
     }
 
 }

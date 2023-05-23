@@ -2,12 +2,12 @@ package ui;
 
 import java.awt.*;
 
-public class PauseButton {
+public abstract class Button {
 
     protected int x, y, width, height;
     protected Rectangle bound;
 
-    public PauseButton(int x, int y, int width, int height) {
+    public Button(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -18,6 +18,11 @@ public class PauseButton {
 
     private void createHitbox() {
         bound = new Rectangle(x, y, width, height);
+    }
+
+    public void drawHitbox(Graphics g) {
+        g.setColor(Color.black);
+        g.drawRect(x, y, width, height);
     }
 
     public int getX() {
